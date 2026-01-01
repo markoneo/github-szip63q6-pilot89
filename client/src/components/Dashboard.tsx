@@ -33,7 +33,8 @@ import {
   Bot,
   Settings2,
   AlertTriangle,
-  Download
+  Download,
+  CalendarPlus
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useData } from '../contexts/DataContext';
@@ -46,7 +47,7 @@ import ProjectListView from './enhanced/ProjectListView';
 
 import LocationAnalytics from './LocationAnalytics';
 import { exportProjectsToCSV, getTodayActiveProjects, getActiveProjects } from '../utils/exportUtils';
-import { generateICS, downloadICS } from '../utils/icsUtils';
+import { generateICS, generateBulkICS, downloadICS } from '../utils/icsUtils';
 
 // Memoized Enhanced Stats Card Component
 const EnhancedStatsCard = React.memo(({ stat, index }: { stat: any, index: number }) => {
@@ -523,6 +524,37 @@ export default function Dashboard() {
     exportProjectsToCSV(dateProjects, filename);
   }, [projects, getCompanyName, getDriverName, getCarTypeName]);
 
+  const handleBulkCalendarExport = useCallback(() => {
+    const activeProjectsList = projects.filter(p => p.status === 'active');
+
+    if (activeProjectsList.length === 0) {
+      alert('No active projects to export to calendar');
+      return;
+    }
+
+    const icsEvents = activeProjectsList.map(project => ({
+      company: getCompanyName(project.company),
+      pickupDate: project.date,
+      pickupTime: project.time,
+      pickupLocation: project.pickupLocation,
+      dropoffLocation: project.dropoffLocation,
+      assignedDriver: project.driver ? getDriverName(project.driver) : undefined,
+      passengers: project.passengers,
+      description: project.description,
+      bookingId: project.bookingId
+    }));
+
+    try {
+      const icsContent = generateBulkICS(icsEvents);
+      const today = new Date().toISOString().split('T')[0];
+      const filename = `ridepilot-all-projects-${today}.ics`;
+      downloadICS(icsContent, filename);
+    } catch (error) {
+      console.error('Error generating bulk calendar export:', error);
+      alert('Failed to generate calendar file. Please try again.');
+    }
+  }, [projects, getCompanyName, getDriverName]);
+
   // Active projects for display
   const activeProjects = useMemo(() => projects.filter(p => p.status === 'active'), [projects]);
 
@@ -863,6 +895,7 @@ export default function Dashboard() {
                 <div className="space-y-3">
                   {[
                     { icon: Bot, label: "AI Booking Assistant", action: () => navigate('/ai-assistant'), color: "blue" },
+                    { icon: CalendarPlus, label: "Export All to Calendar", action: handleBulkCalendarExport, color: "blue" },
                     { icon: BarChart2, label: "Statistics", action: () => navigate('/statistics'), color: "emerald" },
                     { icon: FileText, label: "Financial Report", action: () => navigate('/financial-report'), color: "purple" },
                     { icon: Users, label: "Manage Drivers", action: () => navigate('/settings/drivers'), color: "teal" },
