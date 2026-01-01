@@ -46,6 +46,7 @@ import ProjectListView from './enhanced/ProjectListView';
 
 import LocationAnalytics from './LocationAnalytics';
 import { exportProjectsToCSV, getTodayActiveProjects, getActiveProjects } from '../utils/exportUtils';
+import { generateICS, downloadICS } from '../utils/icsUtils';
 
 // Memoized Enhanced Stats Card Component
 const EnhancedStatsCard = React.memo(({ stat, index }: { stat: any, index: number }) => {
@@ -358,8 +359,27 @@ export default function Dashboard() {
         setVoucherProjectId(projectId);
         setShowVoucherModal(true);
         break;
+      case 'calendar':
+        const project = projects.find(p => p.id === projectId);
+        if (project) {
+          const icsEvent = {
+            company: getCompanyName(project.company),
+            pickupDate: project.date,
+            pickupTime: project.time,
+            pickupLocation: project.pickupLocation,
+            dropoffLocation: project.dropoffLocation,
+            assignedDriver: project.driver ? getDriverName(project.driver) : undefined,
+            passengers: project.passengers,
+            description: project.description,
+            bookingId: project.bookingId
+          };
+          const icsContent = generateICS(icsEvent);
+          const filename = `ridepilot-${project.bookingId || projectId}.ics`;
+          downloadICS(icsContent, filename);
+        }
+        break;
     }
-  }, [navigate, deleteProject, updateProject, startedProjects]);
+  }, [navigate, deleteProject, updateProject, startedProjects, projects, getCompanyName, getDriverName]);
 
   const handleLogout = useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

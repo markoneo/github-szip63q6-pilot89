@@ -379,6 +379,7 @@ export default function ProjectGrid({
                           onDelete={() => onProjectAction(project.id, 'delete')}
                           onStart={() => onProjectAction(project.id, 'start')}
                           onVoucher={() => onProjectAction(project.id, 'voucher')}
+                          onCalendar={() => onProjectAction(project.id, 'calendar')}
                           isCollapsible={cardSettings.collapsible}
                           defaultExpanded={cardSettings.defaultExpanded}
                         />
@@ -416,6 +417,7 @@ export default function ProjectGrid({
                           onDelete={() => onProjectAction(project.id, 'delete')}
                           onStart={() => onProjectAction(project.id, 'start')}
                           onVoucher={() => onProjectAction(project.id, 'voucher')}
+                          onCalendar={() => onProjectAction(project.id, 'calendar')}
                           isCollapsible={cardSettings.collapsible}
                           defaultExpanded={cardSettings.defaultExpanded}
                         />
@@ -452,6 +454,7 @@ export default function ProjectGrid({
                           onDelete={() => onProjectAction(project.id, 'delete')}
                           onStart={() => onProjectAction(project.id, 'start')}
                           onVoucher={() => onProjectAction(project.id, 'voucher')}
+                          onCalendar={() => onProjectAction(project.id, 'calendar')}
                           isCollapsible={cardSettings.collapsible}
                           defaultExpanded={cardSettings.defaultExpanded}
                         />

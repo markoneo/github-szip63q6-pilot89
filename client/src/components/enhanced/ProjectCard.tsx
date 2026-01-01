@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  MapPin, 
-  Users, 
-  Clock, 
-  DollarSign, 
+import {
+  MapPin,
+  Users,
+  Clock,
+  DollarSign,
   Calendar,
   Phone,
   Car,
@@ -17,7 +17,8 @@ import {
   Star,
   AlertCircle,
   Zap,
-  ChevronDown
+  ChevronDown,
+  CalendarPlus
 } from 'lucide-react';
 
 interface ProjectCardProps {
@@ -51,6 +52,7 @@ interface ProjectCardProps {
   onDelete: () => void;
   onStart?: () => void;
   onVoucher?: () => void;
+  onCalendar?: () => void;
   isStarted?: boolean;
   isCollapsible?: boolean;
   defaultExpanded?: boolean;
@@ -69,6 +71,7 @@ const ProjectCard = React.memo(({
   onDelete,
   onStart,
   onVoucher,
+  onCalendar,
   isStarted = false,
   isCollapsible = false,
   defaultExpanded = true
@@ -677,6 +680,16 @@ const ProjectCard = React.memo(({
                   title="Generate voucher for client - share via WhatsApp, email, or print"
                 >
                   <FileText className="w-5 h-5" />
+                </button>
+              )}
+
+              {onCalendar && (
+                <button
+                  onClick={onCalendar}
+                  className="flex items-center justify-center p-2 rounded-lg hover:bg-blue-100 text-blue-600 transition-colors"
+                  title="Add to Calendar - Download ICS file"
+                >
+                  <CalendarPlus className="w-5 h-5" />
                 </button>
               )}
 

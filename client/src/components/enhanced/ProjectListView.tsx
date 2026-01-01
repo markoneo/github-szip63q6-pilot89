@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
-import { ChevronDown, ChevronRight, Users, Calendar, DollarSign, MapPin, Phone, Car, User, Clock, Eye, Edit, Trash2, Play, Receipt, Download } from 'lucide-react';
+import { ChevronDown, ChevronRight, Users, Calendar, DollarSign, MapPin, Phone, Car, User, Clock, Eye, Edit, Trash2, Play, Receipt, Download, CalendarPlus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface Project {
@@ -311,6 +311,13 @@ const ProjectListItem: React.FC<ListItemProps> = ({
                 >
                   <Receipt size={14} className="mr-1" />
                   Voucher
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); onAction('calendar'); }}
+                  className="flex items-center px-3 py-1.5 text-sm bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors shadow-sm hover:shadow-md"
+                >
+                  <CalendarPlus size={14} className="mr-1" />
+                  Add to Calendar
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); onAction('delete'); }}
